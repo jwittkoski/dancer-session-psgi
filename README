@@ -1,0 +1,17 @@
+NAME
+    Dancer::Session::PSGI -
+
+SYNOPSIS
+      use Dancer::Session::PSGI;
+
+DESCRIPTION
+    Dancer::Session::PSGI is
+
+AUTHOR
+    franck cuny <franck@lumberjaph.net>
+
+SEE ALSO
+LICENSE
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
