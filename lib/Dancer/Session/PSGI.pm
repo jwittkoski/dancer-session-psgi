@@ -1,5 +1,7 @@
 package Dancer::Session::PSGI;
 
+# ABSTRACT: Let Plack::Middleware::Session handle Dancer's session
+
 use strict;
 use warnings;
 our $VERSION = '0.01';
@@ -33,11 +35,6 @@ sub destroy {
 }
 
 1;
-__END__
-
-=head1 NAME
-
-Dancer::Session::PSGI - Let Plack::Middleware::Session handle session
 
 =head1 SYNOPSIS
 
@@ -80,16 +77,3 @@ Now, your two applications can share the same session informations.
 =head1 DESCRIPTION
 
 Dancer::Session::PSGI let you use C<Plack::Middleware::Session> as backend for your sessions.
-
-=head1 AUTHOR
-
-franck cuny E<lt>franck@lumberjaph.netE<gt>
-
-=head1 SEE ALSO
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
