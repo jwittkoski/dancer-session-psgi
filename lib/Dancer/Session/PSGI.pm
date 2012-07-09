@@ -1,6 +1,12 @@
 package Dancer::Session::PSGI;
 
+#
 # ABSTRACT: Let Plack::Middleware::Session handle Dancer's session
+#
+# Dancer makes this a bit difficult, as it's Session engine assumes
+# that it is dealing with creating and managing the session cookie,
+# which isn't the case.
+#
 
 use strict;
 use warnings;
@@ -9,21 +15,45 @@ our $VERSION = '0.01';
 use Dancer::SharedData;
 use base 'Dancer::Session::Abstract';
 
-# session_name can't be set in config for this module
-sub session_name {
-    "plack_session";
+#
+# Override the default behavior from Dancer::Session::Abstract
+# (setting a new Session ID) as Plack::Middleware::Session
+# deals with that.
+#
+sub init { }
+
+#
+# Plack::Middleware::Session has already extracted the cookie data and 
+# created an object (with an ID) and so our retrieve doesn't need the ID.
+# However, we return a dummy ID value so that Dancer::Session->get_current_session
+# will call our retrieve instead of creating a new object.
+#
+sub read_session_id {
+    return 1;
 }
 
-sub create {
-    return Dancer::Session::PSGI->new();
+#
+# Plack::Middleware::Session handles creating the cookie from the session
+# data, so skip that step by overriding Dancer::Abstract->write_session_id
+#
+sub write_session_id {
+    return 1;
 }
 
+#
+# Return a Dancer::Session::PSGI object that contains a copy of all
+# the values in the Plack::Middleware::Session
+#
 sub retrieve {
     my ($class, $id) = @_;
     my $session = Dancer::SharedData->request->{env}->{'psgix.session'};
     return Dancer::Session::PSGI->new(%$session);
 }
 
+#
+# Copy the values form the local Dancer::Session::PSGI object back into
+# the values in the Plack::Middleware::Session
+#
 sub flush {
     my $self = shift;
     my $session = Dancer::SharedData->request->{env}->{'psgix.session'};
