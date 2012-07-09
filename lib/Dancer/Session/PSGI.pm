@@ -57,7 +57,14 @@ sub retrieve {
 sub flush {
     my $self = shift;
     my $session = Dancer::SharedData->request->{env}->{'psgix.session'};
-    map {$session->{$_} = $self->{$_}} keys %$self;
+    foreach ( keys %$self ) {
+        if ( defined($self->{$_}) ) {
+            $session->{$_} = $self->{$_};
+        } else {
+            delete $self->{$_};
+            delete $session->{$_};
+        }
+    }
     return $self;
 }
 
