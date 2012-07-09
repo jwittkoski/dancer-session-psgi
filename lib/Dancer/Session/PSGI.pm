@@ -68,7 +68,15 @@ sub flush {
     return $self;
 }
 
+#
+# Completely remove the session
+#
 sub destroy {
+    my $self = shift;
+    my $session = Dancer::SharedData->request->{env}->{'psgix.session'};
+    delete $session->{$_} for keys %$session;
+    my $session_options = Dancer::SharedData->request->{env}->{'psgix.session.options'};
+    $session_options->{expire} = 1;
 }
 
 1;
