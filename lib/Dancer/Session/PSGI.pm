@@ -53,6 +53,7 @@ sub retrieve {
 #
 # Copy the values form the local Dancer::Session::PSGI object back into
 # the values in the Plack::Middleware::Session
+# Undefined values are removed from the session.
 #
 sub flush {
     my $self = shift;
